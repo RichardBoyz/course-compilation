@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./course-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./course-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./course-backend:/app
+    networks:
+      - app-network
+    environment:
+      - DATABASE_URL=sqlite:///db.sqlite3
+
+networks:
+  app-network:
+    driver: bridge
